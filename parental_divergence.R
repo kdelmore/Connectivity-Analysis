@@ -1,0 +1,27 @@
+## setwd, read data in and load libraries
+
+setwd("~/PhD/Analysis/Connectivity-Analysis")
+id="SuitScores_allThrushes_fall"
+data=read.csv(paste("C:/Users/Kira Delmore/Dropbox/Files for Julie/",id,".csv",sep=""),stringsAsFactors = FALSE,strip.white = TRUE, na.strings = c("NA",""))
+library(visreg)
+
+## select taxonomic group you're running and rearrange dataframe to run lm
+
+id2="coastal"
+temp=subset(data,data$species==id2)
+temp2=stack(temp,select=c("aveSuitability_coastal_fall_mcp_hinge","aveSuitability_inland_fall_mcp_hinge"))
+names(temp2)=c("suitability","range")
+temp3=subset(data,data$species%in%c("Veery","Gray-cheeked Thrush","Hermit Thrush","American Robin", "Western Bluebird", "Mountain Bluebird"))
+temp4=subset(temp3,temp3$MigratoryRoute=="intermediate_route")
+temp5=as.data.frame(temp4$aveSuitability_coastal_fall_mcp_hinge)
+temp5[,2]="intermediate" ## MANY of these values are repeated, all from same banding station? Prob have to select only unique entries.
+names(temp5)=c("suitability","range")
+data_stack=rbind(temp2,temp5)
+rm(list=ls(pattern="temp"))
+
+## run lm
+
+z<-lm(suitability~range,data=data_stack)
+anova(z)
+summary(z)
+visreg(z)
