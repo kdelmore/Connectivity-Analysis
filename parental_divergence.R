@@ -1,5 +1,6 @@
 ## TO DO
 # cells?
+# am i grabbing the right data?
 
 ## NOTE ON RESULTS
 # most seem to be niche specialization (more suitable in their respective polygons and equally unsuitable in the other two polygons)
